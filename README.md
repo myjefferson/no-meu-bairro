@@ -36,7 +36,7 @@ npm test
 npm run build
 ```
 
-O build de produção sai em `dist/no-meu-bairro/browser`. O workflow `.github/workflows/ci.yml` executa os mesmos comandos em push e pull request, começando com `npm ci`.
+O build de produção sai em `dist/client`. O workflow `.github/workflows/ci.yml` executa os mesmos comandos em push e pull request, começando com `npm ci`.
 
 ## Estrutura
 

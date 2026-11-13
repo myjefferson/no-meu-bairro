@@ -52,7 +52,9 @@ create trigger on_auth_user_created after insert on auth.users for each row exec
 
 create function public.record_occurrence_status() returns trigger language plpgsql security definer set search_path = '' as $$
 begin
-  if tg_op = 'INSERT' or new.status is distinct from old.status then
+  if tg_op = 'INSERT' then
+    insert into public.occurrence_status_history(occurrence_id, status) values (new.id, new.status);
+  elsif new.status is distinct from old.status then
     insert into public.occurrence_status_history(occurrence_id, status) values (new.id, new.status);
   end if;
   return new;
@@ -77,6 +79,9 @@ create policy "occurrences own insert" on public.occurrences for insert to authe
   with check (
     user_id = (select auth.uid()) and status = 'registrada'
     and exists (select 1 from public.categories where id = category_id and ativo)
+    and (photo_url is null or exists (
+      select 1 from storage.objects where bucket_id = 'occurrence-photos' and name = photo_url
+    ))
   );
 create policy "history own read" on public.occurrence_status_history for select to authenticated
   using (exists (select 1 from public.occurrences where id = occurrence_id and user_id = (select auth.uid())));

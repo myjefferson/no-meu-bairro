@@ -26,7 +26,10 @@ import { OccurrencesService } from './occurrences.service';
           <section aria-labelledby="status-heading" class="current-status"><h2 id="status-heading">Status atual</h2><app-status [status]="item.status" /></section>
           <section aria-labelledby="description-heading"><h2 id="description-heading">Descrição</h2><p class="body-text">{{ item.descricao }}</p></section>
           <section aria-labelledby="address-heading"><h2 id="address-heading">Localização</h2><p>{{ item.endereco }}</p></section>
-          @if (photoUrl()) { <section aria-labelledby="photo-heading"><h2 id="photo-heading">Foto</h2><img [src]="photoUrl()" [alt]="'Foto da ocorrência em ' + item.endereco" /></section> }
+          @if (item.photo_url) { <section aria-labelledby="photo-heading"><h2 id="photo-heading">Foto</h2>
+            @if (photoError()) { <p class="error" role="alert">{{ photoError() }}</p> }
+            @else if (photoUrl()) { <img [src]="photoUrl()" [alt]="'Foto da ocorrência em ' + item.endereco" /> }
+          </section> }
         </mat-card-content></mat-card>
         <section class="history" aria-labelledby="history-heading"><h2 id="history-heading">Histórico de status</h2>
           <ol>@for (entry of item.occurrence_status_history ?? []; track entry.id) {
@@ -49,18 +52,22 @@ export class DetailPage {
   private readonly service = inject(OccurrencesService);
   readonly occurrence = signal<Occurrence | null>(null);
   readonly photoUrl = signal('');
+  readonly photoError = signal('');
   readonly loading = signal(true);
   readonly error = signal('');
   readonly created = signal(Boolean(history.state?.created));
   constructor() { void this.load(); }
   async load(): Promise<void> {
-    this.loading.set(true); this.error.set(''); this.photoUrl.set('');
+    this.loading.set(true); this.error.set(''); this.photoUrl.set(''); this.photoError.set('');
     try {
       const id = this.route.snapshot.paramMap.get('id') ?? '';
       if (!/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(id)) { this.occurrence.set(null); return; }
       const item = await this.service.detail(id);
       this.occurrence.set(item);
-      if (item?.photo_url) this.photoUrl.set(await this.service.photoUrl(item.photo_url));
+      if (item?.photo_url) {
+        try { this.photoUrl.set(await this.service.photoUrl(item.photo_url)); }
+        catch { this.photoError.set('Não foi possível carregar a foto agora. Os demais detalhes continuam disponíveis.'); }
+      }
     } catch (error) { this.error.set(friendlyError(error)); }
     finally { this.loading.set(false); }
   }
