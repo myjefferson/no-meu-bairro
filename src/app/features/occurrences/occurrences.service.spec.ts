@@ -23,6 +23,16 @@ describe('OccurrencesService', () => {
     const { service } = setup();
     expect(await service.list()).toEqual([]);
   });
+  it('retorna dados da lista', async () => {
+    const { service, order } = setup();
+    order.mockResolvedValue({ data: [{ id: 'occ-1', status: 'registrada' }], error: null });
+    expect((await service.list())[0].id).toBe('occ-1');
+  });
+  it('propaga erro da lista', async () => {
+    const { service, order } = setup();
+    order.mockResolvedValue({ data: null, error: new Error('network') });
+    await expect(service.list()).rejects.toThrow('network');
+  });
   it('cria ocorrência sem foto', async () => {
     const { service, insert, upload } = setup();
     expect(await service.create({ category_id: 'cat-1', descricao: 'Buraco grande', endereco: 'Rua Principal, 10', photo: null })).toBe('occ-1');
