@@ -54,14 +54,16 @@ export class OccurrencesService {
       });
       if (error) throw error;
     }
-    const { data, error } = await client.from('occurrences').insert({
-      user_id: userId, category_id: input.category_id, descricao: input.descricao.trim(),
-      endereco: input.endereco.trim(), photo_url: photoPath,
-    }).select('id').single();
-    if (error) {
+    try {
+      const { data, error } = await client.from('occurrences').insert({
+        user_id: userId, category_id: input.category_id, descricao: input.descricao.trim(),
+        endereco: input.endereco.trim(), photo_url: photoPath,
+      }).select('id').single();
+      if (error) throw error;
+      return data.id as string;
+    } catch (error) {
       if (photoPath) await client.storage.from('occurrence-photos').remove([photoPath]);
       throw error;
     }
-    return data.id as string;
   }
 }

@@ -58,4 +58,10 @@ describe('OccurrencesService', () => {
     await expect(service.create({ category_id: 'cat-1', descricao: 'Buraco grande', endereco: 'Rua Principal, 10', photo: new File(['x'], 'x.jpg', { type: 'image/jpeg' }) })).rejects.toThrow('db');
     expect(remove).toHaveBeenCalledOnce();
   });
+  it('remove foto se a gravação lançar uma exceção de rede', async () => {
+    const { service, single, remove } = setup();
+    single.mockRejectedValue(new Error('network'));
+    await expect(service.create({ category_id: 'cat-1', descricao: 'Buraco grande', endereco: 'Rua Principal, 10', photo: new File(['x'], 'x.jpg', { type: 'image/jpeg' }) })).rejects.toThrow('network');
+    expect(remove).toHaveBeenCalledOnce();
+  });
 });
