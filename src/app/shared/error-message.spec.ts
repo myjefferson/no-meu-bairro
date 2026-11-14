@@ -9,6 +9,9 @@ describe('friendlyError', () => {
   it('orienta sobre e-mail não confirmado', () => {
     expect(friendlyError({ code: 'email_not_confirmed' })).toContain('Confirme seu e-mail');
   });
+  it('explica o limite temporário de e-mails', () => {
+    expect(friendlyError({ code: 'over_email_send_rate_limit' })).toContain('Aguarde e tente novamente');
+  });
   it('usa mensagem genérica para erro desconhecido', () => {
     expect(friendlyError(new Error('internal'))).toContain('Verifique sua conexão');
   });
