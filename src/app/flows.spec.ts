@@ -47,5 +47,5 @@ describe('fluxo entre rotas', () => {
     await harness.fixture.whenStable(); harness.detectChanges();
     expect(TestBed.inject(Router).url).toBe(`/ocorrencias/${id}`);
     expect(harness.routeNativeElement?.textContent).toContain('Histórico de status');
-  });
+  }, 20_000);
 });

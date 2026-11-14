@@ -1,4 +1,6 @@
 create extension if not exists pgcrypto;
+create schema if not exists app_private;
+revoke all on schema app_private from public, anon, authenticated;
 
 create type public.occurrence_status as enum ('registrada', 'em_analise', 'concluida');
 
@@ -42,15 +44,15 @@ create index occurrences_user_created_idx on public.occurrences(user_id, created
 create index occurrences_category_idx on public.occurrences(category_id);
 create index status_history_occurrence_created_idx on public.occurrence_status_history(occurrence_id, created_at);
 
-create function public.create_profile() returns trigger language plpgsql security definer set search_path = '' as $$
+create function app_private.create_profile() returns trigger language plpgsql security definer set search_path = '' as $$
 begin
   insert into public.profiles(id, nome)
   values (new.id, coalesce(nullif(trim(new.raw_user_meta_data ->> 'nome'), ''), split_part(new.email, '@', 1)));
   return new;
 end $$;
-create trigger on_auth_user_created after insert on auth.users for each row execute function public.create_profile();
+create trigger on_auth_user_created after insert on auth.users for each row execute function app_private.create_profile();
 
-create function public.record_occurrence_status() returns trigger language plpgsql security definer set search_path = '' as $$
+create function app_private.record_occurrence_status() returns trigger language plpgsql security definer set search_path = '' as $$
 begin
   if tg_op = 'INSERT' then
     insert into public.occurrence_status_history(occurrence_id, status) values (new.id, new.status);
@@ -60,12 +62,12 @@ begin
   return new;
 end $$;
 create trigger occurrence_status_recorded after insert or update of status on public.occurrences
-  for each row execute function public.record_occurrence_status();
+  for each row execute function app_private.record_occurrence_status();
 
-create function public.set_occurrence_updated_at() returns trigger language plpgsql set search_path = '' as $$
+create function app_private.set_occurrence_updated_at() returns trigger language plpgsql set search_path = '' as $$
 begin new.updated_at = now(); return new; end $$;
 create trigger occurrence_updated_at before update on public.occurrences
-  for each row execute function public.set_occurrence_updated_at();
+  for each row execute function app_private.set_occurrence_updated_at();
 
 alter table public.profiles enable row level security;
 alter table public.categories enable row level security;
@@ -100,3 +102,5 @@ create policy "own photo cleanup" on storage.objects for delete to authenticated
 revoke all on public.profiles, public.categories, public.occurrences, public.occurrence_status_history from anon;
 grant select on public.profiles, public.categories, public.occurrences, public.occurrence_status_history to authenticated;
 grant insert (user_id, category_id, descricao, endereco, latitude, longitude, photo_url) on public.occurrences to authenticated;
+grant usage on type public.occurrence_status to authenticated;
+revoke all on all functions in schema app_private from public, anon, authenticated;

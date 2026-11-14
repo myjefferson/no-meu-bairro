@@ -37,6 +37,8 @@ describe('AuthService', () => {
   it('cadastra novo usuário', async () => {
     const { service, auth } = setup();
     expect(await service.register('Ana', 'a@b.com', '12345678')).toBe(true);
-    expect(auth.signUp).toHaveBeenCalledWith({ email: 'a@b.com', password: '12345678', options: { data: { nome: 'Ana' } } });
+    expect(auth.signUp).toHaveBeenCalledWith({ email: 'a@b.com', password: '12345678', options: {
+      data: { nome: 'Ana' }, emailRedirectTo: `${window.location.origin}/entrar`,
+    } });
   });
 });

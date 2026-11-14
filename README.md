@@ -16,7 +16,7 @@ npm ci
 
 Copie `.env.example` para `.env.local` e preencha `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY`. Use apenas a chave pública **publishable**. O script `scripts/write-environment.mjs` cria `src/environments/environment.ts`, que está ignorado pelo Git. Em CI ou na hospedagem, configure as mesmas duas variáveis no ambiente de build. A chave pública fica no bundle do navegador; a proteção dos dados depende das policies RLS. Nunca use `service_role` ou `sb_secret` no frontend.
 
-No SQL Editor do Supabase, execute `supabase/migrations/202611130001_mvp.sql` e depois `supabase/seed.sql`. O banco cria automaticamente o perfil no cadastro e o primeiro registro do histórico ao criar a ocorrência. O bucket `occurrence-photos` é privado, com limite de 5 MB e tipos JPEG, PNG e WebP. O cliente recebe uma URL assinada temporária para mostrar a foto.
+O projeto Supabase **No Meu Bairro** (`gxrfhusburxrenjcqqxi`) já recebeu a migration `supabase/migrations/20261114150521_no_meu_bairro_mvp.sql` e as cinco categorias de `supabase/seed.sql`. Em uma instalação nova, aplique esses arquivos nessa ordem. O banco cria automaticamente o perfil no cadastro e o primeiro registro do histórico ao criar a ocorrência. O bucket `occurrence-photos` é privado, com limite de 5 MB e tipos JPEG, PNG e WebP. O cliente recebe uma URL assinada temporária para mostrar a foto.
 
 Em **Authentication → URL Configuration**, configure a URL do site e adicione as URLs de desenvolvimento e produção permitidas. Se a confirmação de e-mail estiver ativa, o cadastro exige confirmar a mensagem antes do login.
 
@@ -56,4 +56,6 @@ Os campos são validados no formulário e por constraints e policies no banco. T
 
 ## Publicação
 
-O projeto inclui `netlify.toml` e `public/_redirects` para o fallback de rotas da SPA. Conecte o repositório a um site Netlify, configure as duas variáveis públicas no build e publique. Depois ajuste as URLs permitidas no Supabase e execute o smoke test de cadastro/login, registro, lista, detalhes e logout. Sem conta de hospedagem e credenciais públicas do Supabase, essa validação externa permanece pendente.
+O frontend pode ser publicado como site estático. O manifesto `.openai/hosting.json` configura o Sites para servir `dist/client`; `netlify.toml` e `public/_redirects` também permitem usar Netlify. O build incorpora a URL do projeto Supabase e a chave pública de `.env.local` ou das variáveis de ambiente `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY`. Configure os redirecionamentos de autenticação no Supabase para a URL publicada e para `http://localhost:4200/entrar` antes de validar cadastro com confirmação por e-mail.
+
+O site publicado inicialmente é privado para o proprietário. Para uma rodada com participantes externos, será necessário liberar o acesso conforme a hospedagem escolhida e repetir o smoke test na URL acessível a eles.

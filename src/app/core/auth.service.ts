@@ -27,7 +27,10 @@ export class AuthService {
 
   async register(name: string, email: string, password: string): Promise<boolean> {
     const { data, error } = await this.supabase.requireClient().auth.signUp({
-      email, password, options: { data: { nome: name.trim() } },
+      email, password, options: {
+        data: { nome: name.trim() },
+        emailRedirectTo: `${window.location.origin}/entrar`,
+      },
     });
     if (error) throw error;
     this.user.set(data.session?.user ?? null);
