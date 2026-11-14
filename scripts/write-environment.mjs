@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 
 let local = {};
 try {
@@ -20,5 +20,6 @@ if (key.startsWith('eyJ')) {
     throw new Error('Chave Supabase JWT inválida ou administrativa.', { cause: error });
   }
 }
+mkdirSync('src/environments', { recursive: true });
 writeFileSync('src/environments/environment.ts',
   `export const environment = { supabaseUrl: ${JSON.stringify(url)}, supabasePublishableKey: ${JSON.stringify(key)} };\n`);
