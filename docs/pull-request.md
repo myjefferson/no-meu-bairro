@@ -1,28 +1,15 @@
-# Pull request preparado
+# Revisão no GitHub
 
-**Base:** `main`  
-**Branch:** `feature/tests-ci`  
-**Título sugerido:** `test: expand occurrence form coverage`
+Repositório: https://github.com/myjefferson/no-meu-bairro
 
-## Descrição
+O usuário solicitou `push origin master`; os commits do MVP e da integração Supabase foram enviados diretamente para `master`. Por isso, não existe um pull request aberto para essas alterações. A CI em `push` e `pull_request` executa instalação limpa, lint, testes e build.
 
-Amplia os testes do registro de ocorrência e da listagem, incluindo validação, sucesso, navegação, envio duplicado e erros.
-
-## Como testar
+Para os ajustes após a primeira rodada de validação, crie uma branch a partir de `master`, faça commits pequenos e abra um PR com a descrição, os testes executados e capturas reais das telas alteradas. Use `.github/pull_request_template.md`.
 
 ```bash
-npm ci
-npm run lint
-npm test
-npm run build
+git switch master
+git pull origin master
+git switch -c feature/ajustes-validacao
 ```
 
-## Checklist
-
-- [x] Sem credenciais versionadas
-- [x] Testes locais executados
-- [ ] Pipeline verde no GitHub (depende de publicação)
-- [ ] Fluxos reais com Supabase (depende de projeto configurado)
-- [ ] Capturas de tela reais após integração
-
-Para publicar: crie um repositório remoto, adicione `origin`, envie `main` e `feature/tests-ci`, e abra o PR da branch para `main`. O GitHub CLI não está instalado neste computador e ainda não existe remoto configurado.
+Os feedbacks e resultados da comunidade ainda não foram fornecidos; não há mudanças de validação a revisar agora.
