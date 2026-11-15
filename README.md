@@ -56,6 +56,6 @@ Os campos são validados no formulário e por constraints e policies no banco. T
 
 ## Publicação
 
-O frontend pode ser publicado como site estático. O manifesto `.openai/hosting.json` configura o Sites para servir `dist/client`; `netlify.toml` e `public/_redirects` também permitem usar Netlify. O build incorpora a URL do projeto Supabase e a chave pública de `.env.local` ou das variáveis de ambiente `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY`. Configure os redirecionamentos de autenticação no Supabase para a URL publicada e para `http://localhost:4200/entrar` antes de validar cadastro com confirmação por e-mail.
+O endereço público principal é **https://no-meu-bairro-jcsje.netlify.app**. A Netlify publica automaticamente a branch `master` com `npm ci && npm run build` e serve `dist/client`. O arquivo `netlify.toml` configura o fallback das rotas Angular. O build incorpora a URL do projeto Supabase e a chave pública das variáveis `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY`, configuradas no painel da Netlify. A URL principal e o retorno `/entrar` da Netlify estão autorizados no Supabase.
 
-O site publicado inicialmente é privado para o proprietário. Para uma rodada com participantes externos, será necessário liberar o acesso conforme a hospedagem escolhida e repetir o smoke test na URL acessível a eles.
+O endereço anterior em `chatgpt.site` continua privado e não é o link para compartilhar com participantes. Antes de uma rodada comunitária, execute o smoke test completo de cadastro, confirmação de e-mail, login, registro, lista, detalhes e logout na URL pública. O envio de e-mails do Supabase pode impor limite temporário.

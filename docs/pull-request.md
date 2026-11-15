@@ -2,7 +2,7 @@
 
 Repositório: https://github.com/myjefferson/no-meu-bairro
 
-O usuário solicitou `push origin master`; os commits do MVP e da integração Supabase foram enviados diretamente para `master`. Por isso, não existe um pull request aberto para essas alterações. A CI em `push` e `pull_request` executa instalação limpa, lint, testes e build.
+O usuário solicitou `push origin master`; os commits iniciais do MVP e da integração Supabase foram enviados diretamente para `master`. O primeiro PR revisável foi aberto depois, para corrigir a limpeza de fotos quando a gravação lança uma exceção de rede: https://github.com/myjefferson/no-meu-bairro/pull/1. Há dois comentários de auto-revisão na discussão. A CI em `push` e `pull_request` executa instalação limpa, lint, testes e build.
 
 Para os ajustes após a primeira rodada de validação, crie uma branch a partir de `master`, faça commits pequenos e abra um PR com a descrição, os testes executados e capturas reais das telas alteradas. Use `.github/pull_request_template.md`.
 
