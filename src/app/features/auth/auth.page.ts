@@ -38,8 +38,8 @@ import { friendlyError } from '../../shared/error-message';
       </mat-card-content></mat-card>
     </main>
   `,
-  styles: [`:host { display:block; min-height:100vh; background:#f4f6fb } .auth-wrap { max-width:480px; margin:auto; padding:3rem 1rem }
-    .brand { display:flex; align-items:center; gap:.75rem; color:#17478e; font-size:1.5rem; font-weight:800; margin-bottom:2rem }
+  styles: [`:host { display:block; flex:1; background:#f4f6fb } .auth-wrap { max-width:480px; margin:auto; padding:clamp(1rem, 3dvh, 2rem) 1rem }
+    .brand { display:flex; align-items:center; gap:.75rem; color:#17478e; font-size:1.5rem; font-weight:800; margin-bottom:1.25rem }
     .brand-mark { display:grid; place-items:center; width:2.7rem; height:2.7rem; border-radius:12px; background:#17478e; color:white }
     mat-card-content { padding:1.5rem !important } h1 { margin:.2rem 0 .4rem } form { display:grid; gap:.45rem; margin-top:1.5rem }
     mat-form-field { width:100% } .primary-button { min-height:48px } .muted { color:#4d5c6b }`],
