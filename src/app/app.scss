@@ -1,0 +1,16 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.site-footer {
+  margin-top: auto;
+  padding: 1.25rem 1rem;
+  border-top: 1px solid #dce4ef;
+  background: #fff;
+  color: #4d5c6b;
+  font-size: .875rem;
+  line-height: 1.5;
+  text-align: center;
+}
